@@ -11,6 +11,7 @@ import "./index.css";
 import Producto from "./pages/Producto";
 import Cliente from "./pages/Cliente";
 import IngresoProductos from "./pages/IngresoProductos";
+import Category from "./pages/Category";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route exact path="/ventas" component={Venta} />
           <Route exact path="/clientes" component={Cliente} />
           <Route exact path="/IngresoProductos" component={IngresoProductos} />
+          <Route exact path="/Categorias" component={Category} />
 
         </Main>
       </Switch>

@@ -1,24 +1,16 @@
-import { Card, Row, Table } from 'antd'
+import { Button, Card, Row, Table } from 'antd'
 import { MdRemoveShoppingCart } from 'react-icons/md'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const TableVenta = () => {
+const TableVenta = ({selectedProducts,plusProducto,deleteProducto,lessProducto}) => {
 
-
-
-const dataProduct = [
-    {id:1,product:'Producto 1',size:'XL',price:100,quantity:1,subtotal:100},
-    {id:1,product:'Producto 2',size:'L',price:23.5,quantity:1,subtotal:23.5},
-    {id:1,product:'Producto 3',size:'XS',price:12.5,quantity:1,subtotal:12.5},
-    {id:1,product:'Producto 4',size:'M',price:15,quantity:1,subtotal:15},
-]
 
 
 const columns = [
     {
         title: 'Producto',
-        dataIndex: 'product',
-        key: 'product',
+        dataIndex: 'modelName',
+        key: 'modelName',
         width: '40%'
     },
 
@@ -39,26 +31,32 @@ const columns = [
         title: 'cantidad',
         dataIndex: 'quantity',
         key: 'quantity',
-        width: '10%'
+        width: '10%',
+        render: (quantity,record) =><div key={record.idVentaProducto}> <Button disabled={quantity <=1} onClick={()=> lessProducto(record.idVentaProducto)}> - </Button> {quantity} <Button onClick={()=>plusProducto(record.idVentaProducto)}>+</Button> </div> 
     },   {
         title: 'subtotal',
         dataIndex: 'subtotal',
         key: 'subtotal',
-        width: '10%'
+        width: '10%',
+        render: (_, record) => <div key={record.idVentaProducto}>
+            {record.price * record.quantity}
+        </div>
     },
     {
         title: '',
         width: '10%',
-        render:(text,i)=><MdRemoveShoppingCart color='red' style={{cursor:'pointer'}} onClick={()=> console.log(i)}/>
+        render:(text,i)=><MdRemoveShoppingCart color='red' style={{cursor:'pointer'}} onClick={()=> deleteProducto(i.idVentaProducto)}/>
     },
 ]
+useEffect(()=>{
+    console.log(selectedProducts)
+},[selectedProducts])
 
   return (
     <Row>
         <Card style={{width:'100%'}}>
             <div className='table-responsive'>
-            <Table pagination={false} className="ant-border-space" dataSource={dataProduct} columns={columns}/>
-
+            <Table   pagination={false} className="ant-border-space color-gr"  dataSource={selectedProducts} columns={columns} />
             </div>
         </Card>
     </Row>

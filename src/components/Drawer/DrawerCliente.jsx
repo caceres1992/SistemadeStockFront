@@ -1,68 +1,102 @@
-import { Button, Drawer, Form, Input, Row, Select, Space } from 'antd'
+import { Button, Col, Divider, Drawer, Form, Input, Row, Select, Space } from 'antd'
 import React from 'react'
 import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { AiOutlineSearch } from 'react-icons/ai'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { schemaClient } from '../../validation/ValidationClient'
+import { addClient } from '../../services/clienteService'
+const DawerCliente = ({ visible, setVisible }) => {
+  
 
-const DawerCliente= ({ visible, setVisible }) => {
-    const [saveProducto , setSaveProducto] = useState({
-        idCategoria:"",
-        brandName:"",
-        modelName:"",
-        color:"",
-        size:"",
-        quantity:"",
-        price:"",
+
+    const {control,handleSubmit,formState:{errors}} = useForm({
+        resolver: yupResolver(schemaClient)
     })
 
-   const ProductColors = ["red", "blue", "green", "black","white"]
-   const ProductSize = ["small", "medium", "large", "x large"]
- 
+   
+   
+
+    const onSubmitCliente = (data) => {
+     
+        addClient(data).then(res => {
+            console.log(res)
+            setVisible(false)
+        }).catch(err => { console.log(err) })
+        console.log(data)
+    }
     return (
         <Drawer
-        width={400}
+            width={450}
             onClose={() => setVisible(false)}
             visible={visible}
             footer={
-                <Button block>Agregar</Button>
+                <Button block form='formClient' htmlType='submit'>Agregar</Button>
             }
         >
-            <Form layout='vertical'>
-                <Form.Item label="Categoria">
-                    <Select   showSearch placeholder="Seleccione una categoria">
-                        <Select.Option  value="1">Categoria 1</Select.Option>
-                        <Select.Option value="2">Categoria 2</Select.Option>
-                        <Select.Option value="3">Categoria 3</Select.Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item label="Nombre de la Marca">
-                    <Input  placeholder='Ingresar Marca' />
-                </Form.Item>
-                <Form.Item label="Nombre de Modelo">
-                    <Input placeholder='Ingresar Modelo' />
-                </Form.Item>
-                <Form.Item  label="Seleccionar Color">
-                    <Space>
-                    {ProductColors.map((color, index) => (
-                    <div title={color} key={index} style={{width:25,height:25,borderRadius:'50%',background:color,cursor:'pointer',boxShadow:'0px  1px  5px rgba(0,0,0,0.3)'}}/>
-                    ))}
-                    </Space>
-                </Form.Item>
+            <Form layout='vertical' id='formClient' onSubmitCapture={handleSubmit(onSubmitCliente)}>
+            <Divider ><span className='text-sm'>Datos Personales</span></Divider>
 
-                <Form.Item  label="Seleccionar Talla">
-                <Select showSearch placeholder="Seleccione una talla" >
-                    {ProductSize.map((size, index) => (
-                <Select.Option key={index}  value={size}>{size.toUpperCase()}</Select.Option>
-                    ))}
-                    </Select>
+                <Form.Item label="DNI">
+                    <Row gutter={6}>
+                        <Col span={12}>
+                         <InputControl control={control} name="dni"/>
+                            {errors?.dni && <span className='text-red-500'>{errors.dni.message}</span>}
+                            {}
+                        </Col>
+                        <Col span={12}>
+                            <Button block className='flex items-center  justify-center' icon={<AiOutlineSearch />}>buscar</Button>
+                        </Col>
+                    </Row>
                 </Form.Item>
-                <Form.Item label="Insertar cantidad">
-                    <Input placeholder='Cantidad'/>
-                </Form.Item>
-                <Form.Item label="Precio">
-                    <Input placeholder='S/0.00'/>
-                </Form.Item>
+                <Row gutter={6}>
+
+                    <Col span={12}>
+                        <Form.Item label="Nombres">
+                        <InputControl control={control} name="name"/>
+                        {errors?.name && <span className='text-red-500'>{errors.name.message}</span>}
+
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={12}>
+                        <Form.Item label="Apellidos">
+                        <InputControl control={control} name="lastName"/>
+                        {errors?.lastName && <span className='text-red-500'>{errors.lastName.message}</span>}
+
+                        </Form.Item>
+                    </Col>
+                    
+                    <Col span={24}>
+                        <Divider ><span className='text-sm'>Informacion de contacto</span></Divider>
+                        <Form.Item label="Domicilio">
+                        <InputControl control={control} name="address"/>
+                        {errors?.address && <span className='text-red-500'>{errors.address.message}</span>}
+                        </Form.Item>
+
+                        <Form.Item label="Telefono celular">
+                        <InputControl control={control} name="phone"/>
+                        {errors?.phone && <span className='text-red-500'>{errors.phone.message}</span>}
+                        </Form.Item>
+                        <Form.Item label="Email">
+                        <InputControl control={control} name="email"/>
+                        {errors?.email && <span className='text-red-500'>{errors.email.message}</span>}
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
-            </Drawer>
+        </Drawer>
     )
 }
 
 export default DawerCliente
+
+
+export const InputControl=( {control,name})=>{
+
+    return <Controller 
+        control={control}
+        name={name}
+        render={({field})=> <Input {...field}/>}
+      />
+}
