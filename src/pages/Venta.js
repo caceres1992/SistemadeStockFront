@@ -47,7 +47,7 @@ useEffect(() => {
               }
             >
               <div className="table-responsive">
-                <h2 className="text-6xl">como</h2>
+               
                 <Table className="ant-border-space" dataSource={dataProducts} columns={columnsAllSale}
                 />
               </div>
