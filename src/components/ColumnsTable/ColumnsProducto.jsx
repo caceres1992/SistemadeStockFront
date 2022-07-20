@@ -1,11 +1,14 @@
-import { Button, Tag } from "antd";
+import { Avatar, Button, Tag } from "antd";
+import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 
-export const columnsproducto = [
+export function columnsproducto (_getProductoById) {
+  return[
     {
       title: "Producto",
-      dataIndex: "productoName",
-      key: "productoName",
+      dataIndex: "modelName",
+      key: "modelName",
+      render: (text,dato) => <button onClick={()=>console.log(dato)}>{dato?.urlImage?<Avatar size={50} shape="square" src={dato.urlImage}/>:<Avatar size={50} shape="square">{text[0]}</Avatar>}{"  "}{ text}</button>,
       width: "32%",
     },
   
@@ -24,8 +27,8 @@ export const columnsproducto = [
   
     {
       title: "Cantidad",
-      key: "quantity",
-      dataIndex: "quantity"
+      key: "stock",
+      dataIndex: "stock"
     },
     {
       title: "Precio",
@@ -43,8 +46,9 @@ export const columnsproducto = [
       key:"acciones",
       render:(value)=>(
         
-        <Button size="small" type="dashed" onClick={()=> console.log(value)}><HiOutlinePencilAlt style={{margin:0}} size={18}/></Button>
+        <button type={"submit"}  className="btnDetails" onClick={() => _getProductoById(value)}><AiOutlineEdit size={20}/></button>
+
       )
     }
   
-  ];
+  ];}

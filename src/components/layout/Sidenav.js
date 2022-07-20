@@ -150,7 +150,22 @@ function Sidenav({ color }) {
             <span className="label">Dashboard</span>
           </NavLink>
         </Menu.Item>
+
         <Menu.Item key="2">
+          <NavLink to="/categorias">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">Categorias</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="3">
           <NavLink to="/productos">
             <span
               className="icon"
@@ -163,7 +178,7 @@ function Sidenav({ color }) {
             <span className="label">Prodcutos</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="3">
+        <Menu.Item key="4">
           <NavLink to="/ventas">
             <span
               className="icon"
@@ -176,7 +191,7 @@ function Sidenav({ color }) {
             <span className="label">Ventas</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="4">
+        <Menu.Item key="5">
           <NavLink to="/IngresoProductos">
             <span
               className="icon"
@@ -187,7 +202,7 @@ function Sidenav({ color }) {
             <span className="label">Ingreso de Producto</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
+        <Menu.Item className="menu-item-header" key="6">
           Personas
         </Menu.Item>
         <Menu.Item key="7">

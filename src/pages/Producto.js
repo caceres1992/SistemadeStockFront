@@ -16,19 +16,45 @@ import { ProductoData } from "../data/ProductoData";
 import DrawerWrapper from "antd/lib/drawer";
 import DawerProducto from "../components/Drawer/DawerProducto";
 import { columnsproducto } from "../components/ColumnsTable/ColumnsProducto";
+import { getAllProductos, getProductoById } from "../services/productoService";
 
-
-
-// table code start
 
 
 
 function Producto() {
 const [productosData,setProductosData]=useState([])
+const [refreshApi,setRefreshApi]=useState(true)
 const [visible,setVisible]=useState(false)
+const [selectedProduct,setSelectedProduct]=useState(null)
   useEffect(() => {
-      setProductosData(ProductoData)
-  }, [])
+    const getProductoList =  () => {
+      getAllProductos().then((productos) => {
+        setProductosData(productos.data);
+        console.log(productos);
+      }).catch((error) => {console.log(error)});
+    }
+    if(refreshApi){
+      getProductoList()
+      setRefreshApi(false)
+    }
+ 
+  }, [refreshApi]);
+
+  const _getProductoById=(product)=>{
+
+    const {id}=product;
+    getProductoById(id).then((res)=>{
+      setSelectedProduct(res.data);
+      setVisible(true);
+    })
+    .catch((error)=>{console.log(error)})
+  }
+
+const onchangeVisibility=()=>{
+  setVisible(!visible);
+  setSelectedProduct(null)
+}
+
   return (
     <>
       <div className="tabled">
@@ -46,10 +72,11 @@ const [visible,setVisible]=useState(false)
             >
               <div className="table-responsive">
                 <Table
-                  columns={columnsproducto}
-                  dataSource={productosData}
+                
+                  columns={columnsproducto(_getProductoById)}
+                  dataSource={productosData.length>0?productosData:[]}
                   className="ant-border-space"
-                  
+                
                 />
               </div>
           
@@ -57,7 +84,7 @@ const [visible,setVisible]=useState(false)
           </Col>
         </Row>
       </div>
-         <DawerProducto visible={visible} setVisible={setVisible}/>   
+         <DawerProducto  setRefreshApi={setRefreshApi} visible={visible} onchangeVisibility={onchangeVisibility}  selectedProduct={selectedProduct}/>   
     </>
   );
 }

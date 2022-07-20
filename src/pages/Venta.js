@@ -1,14 +1,3 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 
 import {
   Row,
@@ -18,14 +7,29 @@ import {
   Table,
 } from "antd";
 import DrawerVenta from "../components/Drawer/DrawerVenta";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllProductos } from "../services/productoService";
+import { getAllSales } from "../services/SaleService";
+import { columnsAllSale } from "../components/ColumnsTable/ColumnnsAllSale";
 
-function Venta() {
+const  Venta=()=> {
 
 
 const [visible, setVisible] = useState(false);
 
- 
+const [dataProducts, setDataProducts] = useState([]);
+
+useEffect(() => {
+  const getAllSalesByApi = () => {
+      getAllSales().then(res => {
+          setDataProducts(res.data);
+      }).catch(err => { console.log(err) })
+  }
+
+  if (!visible) {
+    getAllSalesByApi();
+  }
+}, [visible]);
 
   return (
     <>
@@ -44,7 +48,7 @@ const [visible, setVisible] = useState(false);
             >
               <div className="table-responsive">
                 <h2 className="text-6xl">como</h2>
-                <Table className="ant-border-space"
+                <Table className="ant-border-space" dataSource={dataProducts} columns={columnsAllSale}
                 />
               </div>
            <DrawerVenta visible={visible} setVisible={setVisible}/>
