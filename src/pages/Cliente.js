@@ -12,6 +12,7 @@ const Cliente = () => {
    if(!visible){
       getAllClientes().then((response) => {
         setData(response)
+        console.log(response)
       }).catch((error) => {
         console.log(error)
       })
@@ -27,14 +28,16 @@ const Cliente = () => {
     },
     {
       title: "Nombre completo",
-      dataIndex: "name",
-      key: "name",
-      render: (_, record) => record.name +" "+ record.lastName
+      dataIndex: "nombre",
+      key: "nombre",
+      render: (_, record) => <span className='uppercase'>{record.nombre +" "+ record.apellidoPaterno +" "+ record.apellidoMaterno}</span>
     },
     {
       title: "Direccion",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "direccion",
+      key: "direccion",
+      render: (_,value) => <span className='uppercase'>{value.direccion == null?"No registrado ":value.direccion}</span>
+
     },
     {
       title: "Correo electronico",
